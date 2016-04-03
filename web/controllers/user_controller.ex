@@ -23,16 +23,14 @@ defmodule Don.UserController do
     create_response conn, Repo.insert(changeset)
   end
 
-  def create_response(conn, {:ok, user}) do
+  defp create_response(conn, {:ok, %User{email: email, password: password}}) do
     conn
-     |> render "show.json", data: user
-    #|> put_flash(:info, "#{user.name} created!")
-    #n|> redirect(to: user_path(conn, :index))
+    |> SessionController.create(%{email: email, password: password})
   end
 
-  def create_response(conn, {:error, changeset}) do
+  defp create_response(conn, {:error, changeset}) do
     conn
-    |> render "errors.json", %{changeset: changeset}
+    |> render("errors.json", %{changeset: changeset})
   end
 end
 

@@ -58,15 +58,15 @@
 
 	var _app2 = _interopRequireDefault(_app);
 
-	var _register_user = __webpack_require__(467);
+	var _register_user = __webpack_require__(469);
 
 	var _register_user2 = _interopRequireDefault(_register_user);
 
-	var _stripe = __webpack_require__(473);
+	var _stripe = __webpack_require__(475);
 
 	var _stripe2 = _interopRequireDefault(_stripe);
 
-	var _card = __webpack_require__(474);
+	var _card = __webpack_require__(476);
 
 	var _card2 = _interopRequireDefault(_card);
 
@@ -24769,7 +24769,15 @@
 
 	var _reactBootstrap = __webpack_require__(217);
 
-	var _jquery = __webpack_require__(466);
+	var _alert = __webpack_require__(466);
+
+	var _alert2 = _interopRequireDefault(_alert);
+
+	var _flash = __webpack_require__(467);
+
+	var _flash2 = _interopRequireDefault(_flash);
+
+	var _jquery = __webpack_require__(468);
 
 	var _jquery2 = _interopRequireDefault(_jquery);
 
@@ -24793,9 +24801,7 @@
 	  _createClass(App, [{
 	    key: 'render',
 	    value: function render() {
-	      /* TODO use props */
-	      var flash = window.location.search.replace("?flash=", "").replace("+", " ");
-
+	      var flash_msg = _flash2.default.get();
 	      return _react2.default.createElement(
 	        'div',
 	        null,
@@ -24808,7 +24814,7 @@
 	            _react2.default.createElement(
 	              _reactRouter.Link,
 	              { to: '/' },
-	              'Home'
+	              ' Home '
 	            )
 	          ),
 	          _react2.default.createElement(
@@ -24821,10 +24827,10 @@
 	            )
 	          )
 	        ),
-	        flash[0] && _react2.default.createElement(
-	          _reactBootstrap.Alert,
-	          { bsStyle: 'info' },
-	          flash
+	        _react2.default.createElement(
+	          _alert2.default,
+	          { timeout: 10000 },
+	          flash_msg
 	        ),
 	        this.props.children
 	      );
@@ -42261,6 +42267,134 @@
 /* 466 */
 /***/ function(module, exports, __webpack_require__) {
 
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+	var _react = __webpack_require__(1);
+
+	var _react2 = _interopRequireDefault(_react);
+
+	var _reactDom = __webpack_require__(158);
+
+	var _reactBootstrap = __webpack_require__(217);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+	var BAlert = function (_Component) {
+	  _inherits(BAlert, _Component);
+
+	  function BAlert(props) {
+	    _classCallCheck(this, BAlert);
+
+	    var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(BAlert).call(this, props));
+
+	    _this.state = {
+	      show: true
+	    };
+	    return _this;
+	  }
+
+	  _createClass(BAlert, [{
+	    key: 'componentDidMount',
+	    value: function componentDidMount() {
+	      var _this2 = this;
+
+	      if (this.props.timeout) {
+	        setTimeout(function () {
+	          _this2.setState({ show: false });
+	        }, parseInt(this.props.timeout));
+	      }
+	    }
+	  }, {
+	    key: 'render',
+	    value: function render() {
+	      return _react2.default.createElement(
+	        'div',
+	        null,
+	        this.state.show && _react2.default.createElement(
+	          _reactBootstrap.Alert,
+	          { bsStyle: this.props.bsStyle || "info" },
+	          this.props.children
+	        )
+	      );
+	    }
+	  }]);
+
+	  return BAlert;
+	}(_react.Component);
+
+	exports.default = BAlert;
+
+/***/ },
+/* 467 */
+/***/ function(module, exports) {
+
+	"use strict";
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	// Singleton for setting and displaying flash messages
+
+	var instance = null;
+
+	var Flash = function () {
+	  function Flash() {
+	    _classCallCheck(this, Flash);
+
+	    if (instance) {
+	      return instance;
+	    }
+
+	    instance = this;
+	    instance.message = null;
+	    instance.msgRetrieved = false;
+	    return instance;
+	  }
+
+	  _createClass(Flash, [{
+	    key: "set",
+	    value: function set(msg) {
+	      this.message = msg;
+	      this.msgRetrieved = false;
+	    }
+	  }, {
+	    key: "get",
+	    value: function get() {
+	      if (this.msgRetrieved) {
+	        this.message = null;
+	      } else {
+	        this.msgRetrieved = true;
+	      }
+	      return this.message;
+	    }
+	  }]);
+
+	  return Flash;
+	}();
+
+	exports.default = new Flash();
+
+/***/ },
+/* 468 */
+/***/ function(module, exports, __webpack_require__) {
+
 	var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;/*!
 	 * jQuery JavaScript Library v2.2.2
 	 * http://jquery.com/
@@ -52106,7 +52240,7 @@
 
 
 /***/ },
-/* 467 */
+/* 469 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -52125,13 +52259,17 @@
 
 	var _reactDom = __webpack_require__(158);
 
-	var _reactSpinnerChildren = __webpack_require__(468);
+	var _flash = __webpack_require__(467);
+
+	var _flash2 = _interopRequireDefault(_flash);
+
+	var _reactSpinnerChildren = __webpack_require__(470);
 
 	var _reactSpinnerChildren2 = _interopRequireDefault(_reactSpinnerChildren);
 
 	var _reactBootstrap = __webpack_require__(217);
 
-	var _user_client = __webpack_require__(470);
+	var _user_client = __webpack_require__(472);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -52171,15 +52309,13 @@
 	      this.setState({ isLoading: true });
 	      (0, _user_client.createUser)({
 	        email: this.state.email,
-	        password: this.state.password
-	      }).then(function (res) {
+	        password: this.state.password }).then(function (res) {
 	        if (res.errors) {
-	          _this2.setState({
-	            errors: res.errors,
-	            isLoading: false });
+	          _this2.setState({ errors: res.errors, isLoading: false });
 	        } else {
 	          _this2.setState({ isLoading: false });
-	          _reactRouter.browserHistory.push({ pathname: '/register', query: { flash: 'Successfully Created' } });
+	          _flash2.default.set('Successfully Created');
+	          _reactRouter.browserHistory.push({ pathname: '/register' });
 	        }
 	      });
 	    }
@@ -52238,7 +52374,7 @@
 	exports.default = RegisterUser;
 
 /***/ },
-/* 468 */
+/* 470 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -52253,7 +52389,7 @@
 
 	var _react2 = _interopRequireDefault(_react);
 
-	var _spin = __webpack_require__(469);
+	var _spin = __webpack_require__(471);
 
 	var _spin2 = _interopRequireDefault(_spin);
 
@@ -52338,7 +52474,7 @@
 	exports.default = Spinner;
 
 /***/ },
-/* 469 */
+/* 471 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_RESULT__;/**
@@ -52721,7 +52857,7 @@
 
 
 /***/ },
-/* 470 */
+/* 472 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -52731,11 +52867,11 @@
 	});
 	exports.createUser = createUser;
 
-	var _jquery = __webpack_require__(466);
+	var _jquery = __webpack_require__(468);
 
 	var _jquery2 = _interopRequireDefault(_jquery);
 
-	var _lodash = __webpack_require__(471);
+	var _lodash = __webpack_require__(473);
 
 	var _lodash2 = _interopRequireDefault(_lodash);
 
@@ -52755,7 +52891,7 @@
 	}
 
 /***/ },
-/* 471 */
+/* 473 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_RESULT__;/* WEBPACK VAR INJECTION */(function(module, global) {/**
@@ -68627,10 +68763,10 @@
 	  }
 	}.call(this));
 
-	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(472)(module), (function() { return this; }())))
+	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(474)(module), (function() { return this; }())))
 
 /***/ },
-/* 472 */
+/* 474 */
 /***/ function(module, exports) {
 
 	module.exports = function(module) {
@@ -68646,7 +68782,7 @@
 
 
 /***/ },
-/* 473 */
+/* 475 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -68739,7 +68875,7 @@
 	exports.default = Stripe;
 
 /***/ },
-/* 474 */
+/* 476 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -68754,7 +68890,7 @@
 
 	var _react2 = _interopRequireDefault(_react);
 
-	var _cardReact = __webpack_require__(475);
+	var _cardReact = __webpack_require__(477);
 
 	var _cardReact2 = _interopRequireDefault(_cardReact);
 
@@ -68897,7 +69033,7 @@
 	exports.default = Card;
 
 /***/ },
-/* 475 */
+/* 477 */
 /***/ function(module, exports, __webpack_require__) {
 
 	(function() {
@@ -68907,9 +69043,9 @@
 
 	  ReactDOM = __webpack_require__(158);
 
-	  Payment = __webpack_require__(476);
+	  Payment = __webpack_require__(478);
 
-	  ReactCard = __webpack_require__(477);
+	  ReactCard = __webpack_require__(479);
 
 	  ReactCardFormContainer = React.createClass({
 	    displayName: 'ReactCardContainer',
@@ -69074,7 +69210,7 @@
 
 
 /***/ },
-/* 476 */
+/* 478 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var require;var require;/* WEBPACK VAR INJECTION */(function(global) {(function(f){if(true){module.exports=f()}else if(typeof define==="function"&&define.amd){define([],f)}else{var g;if(typeof window!=="undefined"){g=window}else if(typeof global!=="undefined"){g=global}else if(typeof self!=="undefined"){g=self}else{g=this}(g.payment || (g.payment = {})).js = f()}})(function(){var define,module,exports;return (function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return require(o,!0);if(i)return i(o,!0);var f=new Error("Cannot find module '"+o+"'");throw f.code="MODULE_NOT_FOUND",f}var l=n[o]={exports:{}};t[o][0].call(l.exports,function(e){var n=t[o][1][e];return s(n?n:e)},l,l.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({1:[function(require,module,exports){
@@ -69907,7 +70043,7 @@
 	/* WEBPACK VAR INJECTION */}.call(exports, (function() { return this; }())))
 
 /***/ },
-/* 477 */
+/* 479 */
 /***/ function(module, exports, __webpack_require__) {
 
 	(function() {
@@ -69915,7 +70051,7 @@
 
 	  React = __webpack_require__(1);
 
-	  Payment = __webpack_require__(476);
+	  Payment = __webpack_require__(478);
 
 	  ClassNames = __webpack_require__(251);
 

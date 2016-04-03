@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { browserHistory } from 'react-router';
 import { render } from 'react-dom';
+import flash from '../utils/flash.js'
 import Spinner from 'react-spinner-children'
 import {
   Col,
@@ -11,7 +12,7 @@ import {
   Alert,
   ButtonToolbar
 } from 'react-bootstrap'
-import { createUser } from './utils/user_client.js'
+import { createUser } from '../utils/user_client.js'
 
 export default class RegisterUser extends Component {
   constructor(props) {
@@ -33,16 +34,14 @@ export default class RegisterUser extends Component {
     this.setState({isLoading: true})
     createUser({
       email: this.state.email,
-      password: this.state.password
-    })
+      password: this.state.password})
     .then((res) => {
       if(res.errors) {
-        this.setState({
-          errors: res.errors,
-          isLoading: false})
+        this.setState({errors: res.errors, isLoading: false})
       } else {
-        this.setState({ isLoading: false })
-        browserHistory.push({ pathname: '/register', query: {flash: 'Successfully Created'} })
+        this.setState({isLoading: false})
+        flash.set('Successfully Created')
+        browserHistory.push({pathname: '/register'})
       }
     })
   }
