@@ -27,3 +27,12 @@ import_config "#{Mix.env}.exs"
 config :phoenix, :generators,
   migration: true,
   binary_id: false
+
+config :guardian, Guardian,
+  allowed_algos: ["HS512"], # optional
+  verify_module: Guardian.JWT,  # optional
+  issuer: "MyApp",
+  ttl: { 30, :days },
+  verify_issuer: true, # optional
+  secret_key: "2i62a3tXeJDG12bCK41tRR0t5BMlxAnQv6oaqcASGaw92GponJ4KoJ8MpE26eygs",
+  serializer: MyApp.GuardianSerializer

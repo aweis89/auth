@@ -12,8 +12,8 @@ config :logger, level: :warn
 # Configure your database
 config :don, Don.Repo,
   adapter: Ecto.Adapters.Postgres,
-  username: "postgres",
-  password: "postgres",
+  #username: "postgres",
+  #password: "postgres",
   database: "don_test",
   hostname: "localhost",
   pool: Ecto.Adapters.SQL.Sandbox

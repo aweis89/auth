@@ -85,7 +85,7 @@ export default class Card extends Component {
                 </Col>
 
                 <Col xs={4} >
-                  <Button className="pull-right" bsStyle="success" style={buttonStyles}>  Submit  </Button>
+                  <Button className="pull-right" style={buttonStyles}>  Submit  </Button>
                 </Col>
               </form>
             </Col>
